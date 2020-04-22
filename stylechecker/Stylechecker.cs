@@ -76,6 +76,11 @@ namespace stylechecker
                             Font font = f as Font;
                             if (!font.Name.ToString().Contains(DefaultFont) & !font.Name.ToString().Contains("serif"))
                                 ResultWarnings += "* " + font.Name + '\n';
+
+                            if (checkCopy)
+                            {
+                                p.Color(System.Drawing.Color.Orange);
+                            }
                         }
                     }
                 }
@@ -90,6 +95,11 @@ namespace stylechecker
                     Font font = f as Font;
                     if (!font.Name.ToString().Contains(DefaultFont) & !font.Name.ToString().Contains("serif"))
                         ResultWarnings += "* " + font.Name + '\n';
+
+                    if (checkCopy)
+                    {
+                        p.Color(System.Drawing.Color.Orange);
+                    }
                 }
             }
         }
@@ -108,11 +118,19 @@ namespace stylechecker
                         {
                             ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                             $" - предположительно используется неверный кегль. Возможно: {DefaultOpenXmlFontSize/2}" + '\n';
+                            if (checkCopy)
+                            {
+                                p.Color(System.Drawing.Color.Orange);
+                            }
                         }
                         else
                         {
                             ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                             " - предположительно используется неверный кегль. " + '\n';
+                            if (checkCopy)
+                            {
+                                p.Color(System.Drawing.Color.Orange);
+                            }
                         }
                     }
                     else if (magic.formatting.Size != DefaultFontSize & usingSize.Contains(magic.formatting.Size) == false)
@@ -132,6 +150,10 @@ namespace stylechecker
             {
                 ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                         " - предположительно используется неверный кегль. " + '\n';
+                if (checkCopy)
+                {
+                    p.Color(System.Drawing.Color.Orange);
+                }
             }
         }
 
@@ -158,6 +180,10 @@ namespace stylechecker
             {
                 ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                     " - предположительно используется неверный междустрочный интервал." + '\n';
+                if (checkCopy)
+                {
+                    p.Color(System.Drawing.Color.Orange);
+                }
             }
         }
 
@@ -207,6 +233,10 @@ namespace stylechecker
                     {
                         ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                             " - предположительно используется неверное выравнивание." + '\n';
+                        if (checkCopy)
+                        {
+                            p.Color(System.Drawing.Color.Orange);
+                        }
                     }
                 }
             }
