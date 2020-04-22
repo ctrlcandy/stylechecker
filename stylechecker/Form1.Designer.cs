@@ -57,6 +57,7 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.cbCopy = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -76,7 +77,7 @@
             this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.Image = global::stylechecker.Properties.Resources.pic;
-            this.button1.Location = new System.Drawing.Point(24, 457);
+            this.button1.Location = new System.Drawing.Point(24, 514);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(270, 95);
             this.button1.TabIndex = 0;
@@ -117,7 +118,7 @@
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.richTextBox1.Size = new System.Drawing.Size(880, 499);
+            this.richTextBox1.Size = new System.Drawing.Size(880, 564);
             this.richTextBox1.TabIndex = 3;
             this.richTextBox1.Text = "";
             // 
@@ -251,7 +252,7 @@
             this.tabControl.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tabControl.RightToLeftLayout = true;
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(888, 528);
+            this.tabControl.Size = new System.Drawing.Size(888, 589);
             this.tabControl.TabIndex = 18;
             // 
             // tabPage1
@@ -261,7 +262,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(880, 499);
+            this.tabPage1.Size = new System.Drawing.Size(880, 560);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Errors";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -273,7 +274,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(880, 499);
+            this.tabPage2.Size = new System.Drawing.Size(880, 560);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Warnings";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -286,7 +287,7 @@
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.ReadOnly = true;
             this.richTextBox2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.richTextBox2.Size = new System.Drawing.Size(880, 499);
+            this.richTextBox2.Size = new System.Drawing.Size(880, 564);
             this.richTextBox2.TabIndex = 4;
             this.richTextBox2.Text = "";
             // 
@@ -346,13 +347,27 @@
             this.notifyIcon1.Text = "Форматирование .docx";
             this.notifyIcon1.Visible = true;
             // 
+            // cbCopy
+            // 
+            this.cbCopy.AutoSize = true;
+            this.cbCopy.BackColor = System.Drawing.Color.Transparent;
+            this.cbCopy.Checked = true;
+            this.cbCopy.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbCopy.Location = new System.Drawing.Point(59, 461);
+            this.cbCopy.Name = "cbCopy";
+            this.cbCopy.Size = new System.Drawing.Size(207, 38);
+            this.cbCopy.TabIndex = 23;
+            this.cbCopy.Text = "Создать копию документа \r\nс выделенными ошибками";
+            this.cbCopy.UseVisualStyleBackColor = false;
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(238)))), ((int)(((byte)(254)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1213, 564);
+            this.ClientSize = new System.Drawing.Size(1213, 625);
+            this.Controls.Add(this.cbCopy);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.numericUpDown2);
             this.Controls.Add(this.numericUpDown1);
@@ -419,6 +434,7 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.LinkLabel linkLabel2;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.CheckBox cbCopy;
     }
 }
 

@@ -61,7 +61,7 @@ namespace stylechecker
             {
                 Stylechecker docx = new Stylechecker(comboBox1.Text, (int)numericUpDown1.Value, (double)numericUpDown2.Value, comboBox2.Text);
                 docx.MyDocument(label1.Text, cbFont.Checked, cbFontSize.Checked,
-                    cbLineSpacing.Checked, cbAlignment.Checked);
+                    cbLineSpacing.Checked, cbAlignment.Checked, cbCopy.Checked);
                 richTextBox1.Text = docx.ResultErrors;
                 richTextBox2.Text = docx.ResultWarnings;
             }

@@ -20,6 +20,8 @@ namespace stylechecker
         public string ResultErrors { get; set; } = string.Empty;
         public string ResultWarnings { get; set; } = string.Empty;
 
+        bool checkCopy;
+
         public Stylechecker(string Font, int FontSize, double LineSpacing, string Alignment)
         {
             DefaultFont = Font;
@@ -57,6 +59,10 @@ namespace stylechecker
                             usingFonts.Add(magic.formatting.FontFamily.Name);
                             ResultErrors += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                         " - используется неверный шрифт: " + magic.formatting.FontFamily.Name + '\n';
+                            if (checkCopy)
+                            {
+                                p.Color(System.Drawing.Color.Red);
+                            }
                         }
                     }
                     else if (magic.formatting.FontFamily == null & usingFonts.Contains("null") == false)
@@ -114,6 +120,10 @@ namespace stylechecker
                         usingSize.Add(magic.formatting.Size);
                         ResultErrors += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                             " - используется неверный кегль: " + magic.formatting.Size + '\n';
+                        if (checkCopy)
+                        {
+                            p.Color(System.Drawing.Color.Red);
+                        }
                     }
                 }
                 usingSize.Clear();
@@ -133,11 +143,15 @@ namespace stylechecker
                 {
                     throw new Exception();
                 }
-                else if (p.LineSpacing!= DefaultLineSpacing)
+                else if (Math.Round(p.LineSpacing, 2, MidpointRounding.AwayFromZero) != Math.Round(DefaultLineSpacing, 2, MidpointRounding.AwayFromZero)) 
                 {
                     ResultErrors += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                         " - используется неверный междустрочный интервал: " +
                         (p.LineSpacing / 12).ToString("0.00").Replace(',', '.') + $" вместо {(DefaultLineSpacing / 12).ToString("0.00").Replace(',', '.')} строки" + '\n';
+                    if (checkCopy)
+                    {
+                        p.Color(System.Drawing.Color.Red);
+                    }
                 }
             }
             catch
@@ -157,21 +171,37 @@ namespace stylechecker
                     {
                         ResultErrors += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                             " - используется выравнивание по центру." + '\n';
+                        if (checkCopy)
+                        {
+                            p.Color(System.Drawing.Color.Red);
+                        }
                     }
                     else if (p.Alignment.ToString() == "left")
                     {
                         ResultErrors += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                             " - используется выравнивание по левому краю." + '\n';
+                        if(checkCopy)
+                        {
+                            p.Color(System.Drawing.Color.Red);
+                        }
                     }
                     else if (p.Alignment.ToString() == "right")
                     {
                         ResultErrors += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                             " - используется выравнивание по правому краю." + '\n';
+                        if (checkCopy)
+                        {
+                            p.Color(System.Drawing.Color.Red);
+                        }
                     }
                     else if (p.Alignment.ToString() == "both")
                     {
                         ResultErrors += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                             " - используется выравнивание по ширине." + '\n';
+                        if (checkCopy)
+                        {
+                            p.Color(System.Drawing.Color.Red);
+                        }
                     }
                     else
                     {
@@ -207,12 +237,20 @@ namespace stylechecker
         }
 
         public void MyDocument(string filePath, bool checkFonts = true, bool checkFontSize = true,
-            bool checkLineSpacing = true, bool checkAlignment = true)
+            bool checkLineSpacing = true, bool checkAlignment = true, bool copy = false)
         {
-            try {
+            try
+            {
                 SetDefaults(filePath);
+                checkCopy = copy;
+
                 if (File.Exists(filePath))
                 {
+                    if (checkCopy)
+                    {
+                        File.Copy(filePath, filePath.Replace(".docx", "_copy.docx"), true);
+                        filePath = filePath.Replace(".docx", "_copy.docx");
+                    }
                     using (var doc = DocX.Load(filePath))
                     {
                         uint line = 0;
@@ -220,7 +258,7 @@ namespace stylechecker
 
                         foreach (var p in doc.Paragraphs)
                         {
-                            line++;  
+                            line++;
 
                             if (p.Text.Length > 15)
                             {
@@ -252,14 +290,19 @@ namespace stylechecker
                                 GetAlignmentInfo(line, text, p);
                             }
                         }
+                        if (checkCopy)
+                        {
+                            doc.Save();
+                        }
                     }
                 }
             }
             catch
             {
                 ResultErrors = ResultWarnings = "Выбран некорректный тип файла!" + '\n' +
-                    "Убедитесь, что выбран файл формата DOCX. " +
-                    "При необоходимости откройте Microsoft Word и пересохраните Ваш документ в нужном формате.";
+                    "Убедитесь, что выбран файл формата DOCX. " + '\n' +
+                    "При необоходимости откройте Microsoft Word и пересохраните Ваш документ в нужном формате." + '\n' +
+                    "Возможно, файл используется другим процессом (например, Microsoft Word).";
             }
         }
     }
