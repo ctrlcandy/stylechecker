@@ -1,12 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing.Text;
+using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace stylechecker
 {
     public partial class Form : System.Windows.Forms.Form
     {
+        private Stylechecker stylechecker;
         public Form()
         {
             InitializeComponent();
@@ -59,11 +62,11 @@ namespace stylechecker
         {
             if (label1.Text != string.Empty)
             {
-                Stylechecker docx = new Stylechecker(comboBox1.Text, (int)numericUpDown1.Value, (double)numericUpDown2.Value, comboBox2.Text);
-                docx.MyDocument(label1.Text, cbFont.Checked, cbFontSize.Checked,
-                    cbLineSpacing.Checked, cbAlignment.Checked, cbCopy.Checked);
-                richTextBox1.Text = docx.ResultErrors;
-                richTextBox2.Text = docx.ResultWarnings;
+                stylechecker = new Stylechecker(comboBox1.Text, (int)numericUpDown1.Value, (double)numericUpDown2.Value, comboBox2.Text);
+                stylechecker.MyDocument(label1.Text, cbFont.Checked, cbFontSize.Checked,
+                    cbLineSpacing.Checked, cbAlignment.Checked, cbCopy.Checked, cbErrors.Checked, cbWarnings.Checked);
+                richTextBox1.Text = stylechecker.ResultErrors;
+                richTextBox2.Text = stylechecker.ResultWarnings;
             }
         }
 
@@ -79,6 +82,35 @@ namespace stylechecker
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             MessageBox.Show("Тут должна быть какая-то информация, но мне лень придумывать");
+        }
+
+        private void Form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (stylechecker != null & label1.Text != null)
+                {
+                if (cbCopy.Checked)
+                {
+                    string tempFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
+                        label1.Text.Remove(0, label1.Text.LastIndexOf('\\')).Replace(".docx", "_copy.docx");
+
+                    if (File.Exists(tempFolder))
+                    {
+                        try
+                        {
+                            if (!stylechecker.AssignedProcess.HasExited)
+                            {
+                                stylechecker.AssignedProcess.CloseMainWindow();
+                            }
+                            Thread.Sleep(500);
+                            File.Delete(tempFolder);
+                        }
+                        catch 
+                        {
+                            MessageBox.Show("К сожалению, необходимо закрыть Microsoft Word.");
+                        }
+                    }
+                }
+            }
         }
     }
 }

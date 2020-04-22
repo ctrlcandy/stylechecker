@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Xceed.Words.NET;
 using Font = DocumentFormat.OpenXml.Wordprocessing.Font;
@@ -20,7 +21,10 @@ namespace stylechecker
         public string ResultErrors { get; set; } = string.Empty;
         public string ResultWarnings { get; set; } = string.Empty;
 
-        bool checkCopy;
+        public Process AssignedProcess { get; set; }
+        private bool checkCopy;
+        private bool checkErrors;
+        private bool checkWarnings;
 
         public Stylechecker(string Font, int FontSize, double LineSpacing, string Alignment)
         {
@@ -61,7 +65,11 @@ namespace stylechecker
                         " - используется неверный шрифт: " + magic.formatting.FontFamily.Name + '\n';
                             if (checkCopy)
                             {
-                                p.Color(System.Drawing.Color.Red);
+                                if (checkErrors)
+                                {
+                                    //p.Color(System.Drawing.Color.Red);
+                                    p.InsertText($"\n--- Используется неверный шрифт: {magic.formatting.FontFamily.Name}. ---");
+                                }
                             }
                         }
                     }
@@ -71,6 +79,16 @@ namespace stylechecker
 
                         ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                    " - предположительно используется неверный шрифт. Возможные варианты:" + '\n';
+
+                        if (checkCopy)
+                        {
+                            if (checkWarnings)
+                            {
+                                //p.Color(System.Drawing.Color.Orange);
+                                p.InsertText("\n--- Предположительно используется неверный шрифт. Возможные варианты: ---");
+                            }
+                        }
+
                         foreach (var f in fontTable.ChildElements)
                         {
                             Font font = f as Font;
@@ -79,7 +97,11 @@ namespace stylechecker
 
                             if (checkCopy)
                             {
-                                p.Color(System.Drawing.Color.Orange);
+                                if (checkWarnings)
+                                {
+                                    //p.Color(System.Drawing.Color.Orange);
+                                    p.InsertText($"\n* {font.Name}");
+                                }
                             }
                         }
                     }
@@ -90,6 +112,16 @@ namespace stylechecker
             {
                 ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                     " - предположительно используется неверный шрифт. Возможные варианты:" + '\n';
+
+                if (checkCopy)
+                {
+                    if (checkWarnings)
+                    {
+                        //p.Color(System.Drawing.Color.Orange);
+                        p.InsertText("\n--- Предположительно используется неверный шрифт. Возможные варианты: ---");
+                    }
+                }
+
                 foreach (var f in fontTable.ChildElements)
                 {
                     Font font = f as Font;
@@ -98,7 +130,12 @@ namespace stylechecker
 
                     if (checkCopy)
                     {
-                        p.Color(System.Drawing.Color.Orange);
+                        if (checkWarnings)
+                        {
+                            //p.Color(System.Drawing.Color.Orange);
+                            p.InsertText($"\n* {font.Name}");
+                        }
+
                     }
                 }
             }
@@ -111,36 +148,50 @@ namespace stylechecker
             {
                 foreach (var magic in p.MagicText)
                 {
-                    if ((magic.formatting.Size == null || magic.formatting.Size == 0) & (usingSize.Contains(null) == false || usingSize.Contains(0) == false))
-                    {
-                        usingSize.Add(0);
-                        if (DefaultFontSize != 0 & DefaultOpenXmlFontSize != 0)
-                        {
-                            ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
-                            $" - предположительно используется неверный кегль. Возможно: {DefaultOpenXmlFontSize/2}" + '\n';
-                            if (checkCopy)
-                            {
-                                p.Color(System.Drawing.Color.Orange);
-                            }
-                        }
-                        else
-                        {
-                            ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
-                            " - предположительно используется неверный кегль. " + '\n';
-                            if (checkCopy)
-                            {
-                                p.Color(System.Drawing.Color.Orange);
-                            }
-                        }
-                    }
-                    else if (magic.formatting.Size != DefaultFontSize & usingSize.Contains(magic.formatting.Size) == false)
+                    if (magic.formatting.Size != DefaultFontSize & usingSize.Contains(magic.formatting.Size) == false & magic.formatting.Size != null & magic.formatting.Size != 0)
                     {
                         usingSize.Add(magic.formatting.Size);
                         ResultErrors += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                             " - используется неверный кегль: " + magic.formatting.Size + '\n';
                         if (checkCopy)
                         {
-                            p.Color(System.Drawing.Color.Red);
+                            if (checkErrors)
+                            {
+                                //p.Color(System.Drawing.Color.Red);
+                                p.InsertText($"\n--- Используется неверный кегль: {magic.formatting.Size} ---");
+                            }
+                        }
+                        usingSize.Add(magic.formatting.Size);
+                    }
+                    else if ((magic.formatting.Size == null || magic.formatting.Size == 0) & usingSize.Contains(DefaultOpenXmlFontSize / 2) == false)
+                    {
+                        if (DefaultFontSize != 0 & DefaultOpenXmlFontSize != 0 & (DefaultOpenXmlFontSize / 2) != DefaultFontSize)
+                        {
+                            ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
+                            $" - предположительно используется неверный кегль. Возможно: {DefaultOpenXmlFontSize/2}" + '\n';
+                            if (checkCopy)
+                            {
+                                if (checkWarnings)
+                                {
+                                    //p.Color(System.Drawing.Color.Orange);
+                                    p.InsertText($"\n--- Предположительно используется неверный кегль. Возможно: {DefaultOpenXmlFontSize / 2} ---");
+                                }
+                            }
+                            usingSize.Add(DefaultOpenXmlFontSize / 2);
+                        }
+                        else if (usingSize.Contains(0) == false)
+                        {
+                            ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
+                            " - предположительно используется неверный кегль. " + '\n';
+                            if (checkCopy)
+                            {
+                                if (checkWarnings)
+                                {
+                                    //p.Color(System.Drawing.Color.Orange);
+                                    p.InsertText("\n--- Предположительно используется неверный кегль. ---");
+                                }
+                            }
+                            usingSize.Add(0);
                         }
                     }
                 }
@@ -152,7 +203,11 @@ namespace stylechecker
                         " - предположительно используется неверный кегль. " + '\n';
                 if (checkCopy)
                 {
-                    p.Color(System.Drawing.Color.Orange);
+                    if (checkWarnings)
+                    {
+                        //p.Color(System.Drawing.Color.Orange);
+                        p.InsertText("\n--- Предположительно используется неверный кегль. ---");
+                    }
                 }
             }
         }
@@ -172,7 +227,11 @@ namespace stylechecker
                         (p.LineSpacing / 12).ToString("0.00").Replace(',', '.') + $" вместо {(DefaultLineSpacing / 12).ToString("0.00").Replace(',', '.')} строки" + '\n';
                     if (checkCopy)
                     {
-                        p.Color(System.Drawing.Color.Red);
+                        if (checkErrors)
+                        {
+                            //p.Color(System.Drawing.Color.Red);
+                            p.InsertText($"\n--- Используется неверный междустрочный интервал: {(p.LineSpacing / 12).ToString("0.00").Replace(',', '.')} вместо {(DefaultLineSpacing / 12).ToString("0.00").Replace(',', '.')} строки ---");
+                        }
                     }
                 }
             }
@@ -182,7 +241,11 @@ namespace stylechecker
                     " - предположительно используется неверный междустрочный интервал." + '\n';
                 if (checkCopy)
                 {
-                    p.Color(System.Drawing.Color.Orange);
+                    if (checkWarnings)
+                    {
+                        //p.Color(System.Drawing.Color.Orange);
+                        p.InsertText("\n--- Предположительно используется неверный междустрочный интервал. ---");
+                    }
                 }
             }
         }
@@ -199,7 +262,11 @@ namespace stylechecker
                             " - используется выравнивание по центру." + '\n';
                         if (checkCopy)
                         {
-                            p.Color(System.Drawing.Color.Red);
+                            if (checkErrors)
+                            {
+                                //p.Color(System.Drawing.Color.Red);
+                                p.InsertText("\n--- Используется выравнивание по центру. ---");
+                            }
                         }
                     }
                     else if (p.Alignment.ToString() == "left")
@@ -208,7 +275,11 @@ namespace stylechecker
                             " - используется выравнивание по левому краю." + '\n';
                         if(checkCopy)
                         {
-                            p.Color(System.Drawing.Color.Red);
+                            if (checkErrors)
+                            {
+                                //p.Color(System.Drawing.Color.Red);
+                                p.InsertText("\n--- Используется выравнивание по левому краю. ---");
+                            }
                         }
                     }
                     else if (p.Alignment.ToString() == "right")
@@ -217,7 +288,11 @@ namespace stylechecker
                             " - используется выравнивание по правому краю." + '\n';
                         if (checkCopy)
                         {
-                            p.Color(System.Drawing.Color.Red);
+                            if (checkErrors)
+                            {
+                                //p.Color(System.Drawing.Color.Red);
+                                p.InsertText("\n--- Используется выравнивание по правому краю. ---");
+                            }
                         }
                     }
                     else if (p.Alignment.ToString() == "both")
@@ -226,7 +301,11 @@ namespace stylechecker
                             " - используется выравнивание по ширине." + '\n';
                         if (checkCopy)
                         {
-                            p.Color(System.Drawing.Color.Red);
+                            if (checkErrors)
+                            {
+                                //p.Color(System.Drawing.Color.Red);
+                                p.InsertText("\n--- Используется выравнивание по ширине. ---");
+                            }
                         }
                     }
                     else
@@ -235,7 +314,11 @@ namespace stylechecker
                             " - предположительно используется неверное выравнивание." + '\n';
                         if (checkCopy)
                         {
-                            p.Color(System.Drawing.Color.Orange);
+                            if (checkWarnings)
+                            {
+                                //p.Color(System.Drawing.Color.Orange);
+                                p.InsertText("\n--- Предположительно используется неверное выравнивание. ---");
+                            }
                         }
                     }
                 }
@@ -267,19 +350,24 @@ namespace stylechecker
         }
 
         public void MyDocument(string filePath, bool checkFonts = true, bool checkFontSize = true,
-            bool checkLineSpacing = true, bool checkAlignment = true, bool copy = false)
+            bool checkLineSpacing = true, bool checkAlignment = true, bool copy = false, bool errors = false, bool warnings = false)
         {
             try
             {
                 SetDefaults(filePath);
                 checkCopy = copy;
+                checkErrors = errors;
+                checkWarnings = warnings;
 
                 if (File.Exists(filePath))
                 {
                     if (checkCopy)
                     {
-                        File.Copy(filePath, filePath.Replace(".docx", "_copy.docx"), true);
-                        filePath = filePath.Replace(".docx", "_copy.docx");
+                        string tempFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + 
+                            filePath.Remove(0, filePath.LastIndexOf('\\')).Replace(".docx", "_copy.docx");
+
+                        File.Copy(filePath, tempFolder, true);
+                        filePath = tempFolder;
                     }
                     using (var doc = DocX.Load(filePath))
                     {
@@ -323,6 +411,11 @@ namespace stylechecker
                         if (checkCopy)
                         {
                             doc.Save();
+                            AssignedProcess = new Process();
+                            AssignedProcess.StartInfo.FileName = filePath;
+                            AssignedProcess.StartInfo.Verb = "Open";
+                            AssignedProcess.StartInfo.CreateNoWindow = false;
+                            AssignedProcess.Start();
                         }
                     }
                 }
