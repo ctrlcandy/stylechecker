@@ -112,6 +112,27 @@ namespace stylechecker
                 }
             }
         }
+
+        void Form_DragDrop(object sender, DragEventArgs e)
+        {
+           string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+           label1.Text = files[0].ToString();
+        }
+
+        void Form_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                label1.Text = "Отпустите мышь!";
+                e.Effect = DragDropEffects.Copy;
+            }
+        }
+
+        void Form_DragLeave(object sender, EventArgs e)
+        {
+            label1.Text = "Укажите путь к файлу или перетащите его в приложение";
+        }
+
     }
 }
  

@@ -92,7 +92,7 @@
             this.button2.BackgroundImage = global::stylechecker.Properties.Resources.pic;
             this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button2.Image = global::stylechecker.Properties.Resources.pic;
-            this.button2.Location = new System.Drawing.Point(24, 12);
+            this.button2.Location = new System.Drawing.Point(24, 5);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(118, 41);
             this.button2.TabIndex = 1;
@@ -104,11 +104,11 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(148, 24);
+            this.label1.Location = new System.Drawing.Point(148, 17);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(154, 17);
+            this.label1.Size = new System.Drawing.Size(388, 17);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Укажите путь к файлу";
+            this.label1.Text = "Укажите путь к файлу или перетащите его в приложение";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // richTextBox1
@@ -399,6 +399,7 @@
             // 
             // Form
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(238)))), ((int)(((byte)(254)))));
@@ -436,6 +437,9 @@
             this.Text = "Проверка форматирования .docx документов";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form_DragEnter);
+            this.DragLeave += new System.EventHandler(this.Form_DragLeave);
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
