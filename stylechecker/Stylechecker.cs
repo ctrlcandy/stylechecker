@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Xceed.Words.NET;
 using Font = DocumentFormat.OpenXml.Wordprocessing.Font;
 
@@ -18,6 +19,7 @@ namespace stylechecker
         private string DefaultAlignment { get; set; } = string.Empty;
 
         private Fonts fontTable;
+        //private DocumentFormat.OpenXml.OpenXmlElementList styles;
         public string ResultErrors { get; set; } = string.Empty;
         public string ResultWarnings { get; set; } = string.Empty;
 
@@ -30,7 +32,7 @@ namespace stylechecker
         {
             DefaultFont = Font;
             DefaultFontSize = FontSize;
-           
+
             switch (Alignment)
             {
                 case ("По центру"):
@@ -56,6 +58,11 @@ namespace stylechecker
             {
                 foreach (var magic in p.MagicText)
                 {
+                    /*foreach (var s in styles)
+                    {
+                       // some shit
+                    }*/
+
                     if (magic.formatting.FontFamily.Name != DefaultFont)
                     {
                         if (usingFonts.Contains(magic.formatting.FontFamily.Name) == false)
@@ -67,7 +74,6 @@ namespace stylechecker
                             {
                                 if (checkErrors)
                                 {
-                                    //p.Color(System.Drawing.Color.Red);
                                     p.InsertText($"\n--- Используется неверный шрифт: {magic.formatting.FontFamily.Name}. ---");
                                 }
                             }
@@ -84,7 +90,6 @@ namespace stylechecker
                         {
                             if (checkWarnings)
                             {
-                                //p.Color(System.Drawing.Color.Orange);
                                 p.InsertText("\n--- Предположительно используется неверный шрифт. Возможные варианты: ---");
                             }
                         }
@@ -99,7 +104,6 @@ namespace stylechecker
                             {
                                 if (checkWarnings)
                                 {
-                                    //p.Color(System.Drawing.Color.Orange);
                                     p.InsertText($"\n* {font.Name}");
                                 }
                             }
@@ -117,7 +121,6 @@ namespace stylechecker
                 {
                     if (checkWarnings)
                     {
-                        //p.Color(System.Drawing.Color.Orange);
                         p.InsertText("\n--- Предположительно используется неверный шрифт. Возможные варианты: ---");
                     }
                 }
@@ -132,7 +135,6 @@ namespace stylechecker
                     {
                         if (checkWarnings)
                         {
-                            //p.Color(System.Drawing.Color.Orange);
                             p.InsertText($"\n* {font.Name}");
                         }
 
@@ -157,7 +159,6 @@ namespace stylechecker
                         {
                             if (checkErrors)
                             {
-                                //p.Color(System.Drawing.Color.Red);
                                 p.InsertText($"\n--- Используется неверный кегль: {magic.formatting.Size} ---");
                             }
                         }
@@ -168,12 +169,11 @@ namespace stylechecker
                         if (DefaultFontSize != 0 & DefaultOpenXmlFontSize != 0 & (DefaultOpenXmlFontSize / 2) != DefaultFontSize)
                         {
                             ResultWarnings += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
-                            $" - предположительно используется неверный кегль. Возможно: {DefaultOpenXmlFontSize/2}" + '\n';
+                            $" - предположительно используется неверный кегль. Возможно: {DefaultOpenXmlFontSize / 2}" + '\n';
                             if (checkCopy)
                             {
                                 if (checkWarnings)
                                 {
-                                    //p.Color(System.Drawing.Color.Orange);
                                     p.InsertText($"\n--- Предположительно используется неверный кегль. Возможно: {DefaultOpenXmlFontSize / 2} ---");
                                 }
                             }
@@ -187,7 +187,6 @@ namespace stylechecker
                             {
                                 if (checkWarnings)
                                 {
-                                    //p.Color(System.Drawing.Color.Orange);
                                     p.InsertText("\n--- Предположительно используется неверный кегль. ---");
                                 }
                             }
@@ -205,7 +204,6 @@ namespace stylechecker
                 {
                     if (checkWarnings)
                     {
-                        //p.Color(System.Drawing.Color.Orange);
                         p.InsertText("\n--- Предположительно используется неверный кегль. ---");
                     }
                 }
@@ -220,7 +218,7 @@ namespace stylechecker
                 {
                     throw new Exception();
                 }
-                else if (Math.Round(p.LineSpacing, 2, MidpointRounding.AwayFromZero) != Math.Round(DefaultLineSpacing, 2, MidpointRounding.AwayFromZero)) 
+                else if (Math.Round(p.LineSpacing, 2, MidpointRounding.AwayFromZero) != Math.Round(DefaultLineSpacing, 2, MidpointRounding.AwayFromZero))
                 {
                     ResultErrors += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                         " - используется неверный междустрочный интервал: " +
@@ -229,7 +227,6 @@ namespace stylechecker
                     {
                         if (checkErrors)
                         {
-                            //p.Color(System.Drawing.Color.Red);
                             p.InsertText($"\n--- Используется неверный междустрочный интервал: {(p.LineSpacing / 12).ToString("0.00").Replace(',', '.')} вместо {(DefaultLineSpacing / 12).ToString("0.00").Replace(',', '.')} строки ---");
                         }
                     }
@@ -243,7 +240,6 @@ namespace stylechecker
                 {
                     if (checkWarnings)
                     {
-                        //p.Color(System.Drawing.Color.Orange);
                         p.InsertText("\n--- Предположительно используется неверный междустрочный интервал. ---");
                     }
                 }
@@ -264,7 +260,6 @@ namespace stylechecker
                         {
                             if (checkErrors)
                             {
-                                //p.Color(System.Drawing.Color.Red);
                                 p.InsertText("\n--- Используется выравнивание по центру. ---");
                             }
                         }
@@ -273,11 +268,10 @@ namespace stylechecker
                     {
                         ResultErrors += "Строка " + line + " (начинается со слов \"" + text + "\" )" +
                             " - используется выравнивание по левому краю." + '\n';
-                        if(checkCopy)
+                        if (checkCopy)
                         {
                             if (checkErrors)
                             {
-                                //p.Color(System.Drawing.Color.Red);
                                 p.InsertText("\n--- Используется выравнивание по левому краю. ---");
                             }
                         }
@@ -290,7 +284,6 @@ namespace stylechecker
                         {
                             if (checkErrors)
                             {
-                                //p.Color(System.Drawing.Color.Red);
                                 p.InsertText("\n--- Используется выравнивание по правому краю. ---");
                             }
                         }
@@ -303,7 +296,6 @@ namespace stylechecker
                         {
                             if (checkErrors)
                             {
-                                //p.Color(System.Drawing.Color.Red);
                                 p.InsertText("\n--- Используется выравнивание по ширине. ---");
                             }
                         }
@@ -316,7 +308,6 @@ namespace stylechecker
                         {
                             if (checkWarnings)
                             {
-                                //p.Color(System.Drawing.Color.Orange);
                                 p.InsertText("\n--- Предположительно используется неверное выравнивание. ---");
                             }
                         }
@@ -329,24 +320,25 @@ namespace stylechecker
 
         void SetDefaults(string filePath)
         {
-        
-                using (WordprocessingDocument docx = WordprocessingDocument.Open(filePath, true))
-                {
-                    DocDefaults defaults = docx.MainDocumentPart.StyleDefinitionsPart.Styles.DocDefaults;
-                    RunFonts runFont = defaults.RunPropertiesDefault.RunPropertiesBaseStyle.RunFonts;
-                    try
-                    {
-                        DefaultOpenXmlFontSize = Convert.ToInt32(defaults.RunPropertiesDefault.RunPropertiesBaseStyle.FontSize.Val.Value);
-                    }
-                    catch
-                    {
-                        DefaultOpenXmlFontSize = 0;
-                    }
 
-                    fontTable = docx.MainDocumentPart.FontTablePart.Fonts;
-                    docx.Close();
+            using (WordprocessingDocument docx = WordprocessingDocument.Open(filePath, true))
+            {
+                fontTable = docx.MainDocumentPart.FontTablePart.Fonts;
+                //styles = docx.MainDocumentPart.StyleDefinitionsPart.Styles.ChildElements;
+
+                DocDefaults defaults = docx.MainDocumentPart.StyleDefinitionsPart.Styles.DocDefaults;
+                RunFonts runFont = defaults.RunPropertiesDefault.RunPropertiesBaseStyle.RunFonts;
+                try
+                {
+                    DefaultOpenXmlFontSize = Convert.ToInt32(defaults.RunPropertiesDefault.RunPropertiesBaseStyle.FontSize.Val.Value);
                 }
-            
+                catch
+                {
+                    DefaultOpenXmlFontSize = 0;
+                }
+                docx.Close();
+            }
+
         }
 
         public void MyDocument(string filePath, bool checkFonts = true, bool checkFontSize = true,
@@ -363,7 +355,7 @@ namespace stylechecker
                 {
                     if (checkCopy)
                     {
-                        string tempFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + 
+                        string tempFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
                             filePath.Remove(0, filePath.LastIndexOf('\\')).Replace(".docx", "_copy.docx");
 
                         File.Copy(filePath, tempFolder, true);
@@ -377,6 +369,7 @@ namespace stylechecker
                         foreach (var p in doc.Paragraphs)
                         {
                             line++;
+                            //ResultErrors += styles.ChildElements.Count.ToString() + '\n';
 
                             if (p.Text.Length > 15)
                             {

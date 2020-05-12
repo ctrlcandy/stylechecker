@@ -22,7 +22,7 @@ namespace stylechecker
             comboBox1.SelectedItem = "Times New Roman";
 
             comboBox2.Items.Add("По левому краю");
-            comboBox2.Items.Add("По центру"); 
+            comboBox2.Items.Add("По центру");
             comboBox2.Items.Add("По правому краю");
             comboBox2.Items.Add("По ширине");
             comboBox2.SelectedItem = "По ширине";
@@ -31,9 +31,15 @@ namespace stylechecker
             numericUpDown2.Value = 1.5M;
         }
 
+        public Form(string arg) : this()
+        {
+            label1.Text = arg;
+
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -49,13 +55,13 @@ namespace stylechecker
 
         private void button2_Click(object sender, EventArgs e)
         {
-          
-                string filePath = string.Empty;
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                    filePath = openFileDialog1.FileName.ToString();
 
-                label1.Text = filePath;
-            
+            string filePath = string.Empty;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                filePath = openFileDialog1.FileName.ToString();
+
+            label1.Text = filePath;
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -87,7 +93,7 @@ namespace stylechecker
         private void Form_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (stylechecker != null & label1.Text != null)
-                {
+            {
                 if (cbCopy.Checked)
                 {
                     string tempFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) +
@@ -104,9 +110,9 @@ namespace stylechecker
                             Thread.Sleep(500);
                             File.Delete(tempFolder);
                         }
-                        catch 
+                        catch
                         {
-                            MessageBox.Show("К сожалению, необходимо закрыть Microsoft Word.");
+                            MessageBox.Show("Необходимо закрыть Microsoft Word перед закрытием программы.");
                         }
                     }
                 }
@@ -115,8 +121,8 @@ namespace stylechecker
 
         void Form_DragDrop(object sender, DragEventArgs e)
         {
-           string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-           label1.Text = files[0].ToString();
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            label1.Text = files[0].ToString();
         }
 
         void Form_DragEnter(object sender, DragEventArgs e)
@@ -135,4 +141,3 @@ namespace stylechecker
 
     }
 }
- 
