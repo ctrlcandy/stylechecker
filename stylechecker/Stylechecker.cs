@@ -341,6 +341,21 @@ namespace stylechecker
 
         }
 
+        bool GetTableOfContentsInfo(string filePath)
+        {
+            using (var doc = DocX.Load(filePath))
+            {
+                foreach (var p in doc.Paragraphs)
+                {
+                    if (p.Text.ToUpper().Trim(' ').Equals("СОДЕРЖАНИЕ") || p.Text.ToUpper().Trim(' ').Equals("ОГЛАВЛЕНИЕ"))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public void MyDocument(string filePath, bool checkFonts = true, bool checkFontSize = true,
             bool checkLineSpacing = true, bool checkAlignment = true, bool copy = false, bool errors = false, bool warnings = false)
         {
@@ -361,15 +376,34 @@ namespace stylechecker
                         File.Copy(filePath, tempFolder, true);
                         filePath = tempFolder;
                     }
+
+                    bool tableOfContentsInfo = GetTableOfContentsInfo(filePath);
                     using (var doc = DocX.Load(filePath))
                     {
                         uint line = 0;
                         string text;
-
+                        bool findTable = false;
                         foreach (var p in doc.Paragraphs)
                         {
                             line++;
-                            //ResultErrors += styles.ChildElements.Count.ToString() + '\n';
+
+                            if (tableOfContentsInfo)
+                            {
+                                if (p.Text.ToUpper().Trim(' ').Equals("СОДЕРЖАНИЕ") || p.Text.ToUpper().Trim(' ').Equals("ОГЛАВЛЕНИЕ"))
+                                {
+                                    findTable = true;
+                                    continue; // Оглавление найдено
+                                }
+                                else if (!findTable)
+                                {
+                                    continue;
+                                }
+                                else if (p.Xml.ToString().Contains("hyperlink") || p.Xml.ToString().Contains("fldSimple") || p.Xml.ToString().Contains("fldChar"))
+                                {
+                                    continue;
+                                }
+                                tableOfContentsInfo = false;
+                            }
 
                             if (p.Text.Length > 15)
                             {

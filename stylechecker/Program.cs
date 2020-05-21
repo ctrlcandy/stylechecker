@@ -15,14 +15,13 @@ namespace stylechecker
         static extern bool AttachConsole(int dwProcessId);
         private const int ATTACH_PARENT_PROCESS = -1;
 
-
         [STAThread]
         static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             if (args.Length == 0)
             {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Form());
             }
             else
@@ -57,6 +56,8 @@ namespace stylechecker
                 }
                 else if (args.Length == 1 && args[0] != "-help" && args[0] != "--help" && args[0] != "-man")
                 {
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
                     Application.Run(new Form(args[0]));
                 }
                 else
