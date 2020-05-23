@@ -70,7 +70,7 @@ namespace stylechecker
             {
                 stylechecker = new Stylechecker(comboBox1.Text, (int)numericUpDown1.Value, (double)numericUpDown2.Value, comboBox2.Text);
                 stylechecker.MyDocument(label1.Text, cbFont.Checked, cbFontSize.Checked,
-                    cbLineSpacing.Checked, cbAlignment.Checked, cbCopy.Checked, cbErrors.Checked, cbWarnings.Checked);
+                    cbLineSpacing.Checked, cbAlignment.Checked, cbCopy.Checked, cbErrors.Checked, cbWarnings.Checked, cbTitle.Checked);
                 richTextBox1.Text = stylechecker.ResultErrors;
                 richTextBox2.Text = stylechecker.ResultWarnings;
             }

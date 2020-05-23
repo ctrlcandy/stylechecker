@@ -59,6 +59,7 @@
             this.cbErrors = new System.Windows.Forms.CheckBox();
             this.cbWarnings = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.cbTitle = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -78,7 +79,7 @@
             this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.Image = global::stylechecker.Properties.Resources.pic;
-            this.button1.Location = new System.Drawing.Point(24, 584);
+            this.button1.Location = new System.Drawing.Point(24, 610);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(270, 95);
             this.button1.TabIndex = 0;
@@ -119,7 +120,7 @@
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.richTextBox1.Size = new System.Drawing.Size(880, 630);
+            this.richTextBox1.Size = new System.Drawing.Size(880, 660);
             this.richTextBox1.TabIndex = 3;
             this.richTextBox1.Text = "";
             // 
@@ -261,7 +262,7 @@
             this.tabControl.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tabControl.RightToLeftLayout = true;
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(888, 659);
+            this.tabControl.Size = new System.Drawing.Size(888, 685);
             this.tabControl.TabIndex = 18;
             // 
             // tabPage1
@@ -271,7 +272,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(880, 630);
+            this.tabPage1.Size = new System.Drawing.Size(880, 656);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Errors";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -283,7 +284,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(880, 630);
+            this.tabPage2.Size = new System.Drawing.Size(880, 656);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Warnings";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -296,7 +297,7 @@
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.ReadOnly = true;
             this.richTextBox2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.richTextBox2.Size = new System.Drawing.Size(880, 630);
+            this.richTextBox2.Size = new System.Drawing.Size(880, 656);
             this.richTextBox2.TabIndex = 4;
             this.richTextBox2.Text = "";
             // 
@@ -356,7 +357,7 @@
             this.cbCopy.BackColor = System.Drawing.Color.Transparent;
             this.cbCopy.Checked = true;
             this.cbCopy.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbCopy.Location = new System.Drawing.Point(38, 472);
+            this.cbCopy.Location = new System.Drawing.Point(38, 461);
             this.cbCopy.Name = "cbCopy";
             this.cbCopy.Size = new System.Drawing.Size(225, 38);
             this.cbCopy.TabIndex = 23;
@@ -369,7 +370,7 @@
             this.cbErrors.BackColor = System.Drawing.Color.Transparent;
             this.cbErrors.Checked = true;
             this.cbErrors.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbErrors.Location = new System.Drawing.Point(38, 557);
+            this.cbErrors.Location = new System.Drawing.Point(38, 539);
             this.cbErrors.Name = "cbErrors";
             this.cbErrors.Size = new System.Drawing.Size(83, 21);
             this.cbErrors.TabIndex = 24;
@@ -380,7 +381,7 @@
             // 
             this.cbWarnings.AutoSize = true;
             this.cbWarnings.BackColor = System.Drawing.Color.Transparent;
-            this.cbWarnings.Location = new System.Drawing.Point(136, 557);
+            this.cbWarnings.Location = new System.Drawing.Point(136, 539);
             this.cbWarnings.Name = "cbWarnings";
             this.cbWarnings.Size = new System.Drawing.Size(144, 21);
             this.cbWarnings.TabIndex = 25;
@@ -391,11 +392,24 @@
             // 
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Location = new System.Drawing.Point(35, 520);
+            this.label8.Location = new System.Drawing.Point(35, 502);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(239, 34);
             this.label8.TabIndex = 26;
             this.label8.Text = "ОТОБРАЖАЕМАЯ ИНФОРМАЦИЯ \r\n                      В КОПИИ";
+            // 
+            // cbTitle
+            // 
+            this.cbTitle.AutoSize = true;
+            this.cbTitle.BackColor = System.Drawing.Color.Transparent;
+            this.cbTitle.Checked = true;
+            this.cbTitle.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbTitle.Location = new System.Drawing.Point(51, 566);
+            this.cbTitle.Name = "cbTitle";
+            this.cbTitle.Size = new System.Drawing.Size(208, 38);
+            this.cbTitle.TabIndex = 27;
+            this.cbTitle.Text = "Пропуск титульного листа \r\n         и оглавления";
+            this.cbTitle.UseVisualStyleBackColor = false;
             // 
             // Form
             // 
@@ -404,7 +418,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(238)))), ((int)(((byte)(254)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1213, 695);
+            this.ClientSize = new System.Drawing.Size(1213, 721);
+            this.Controls.Add(this.cbTitle);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.cbWarnings);
             this.Controls.Add(this.cbErrors);
@@ -482,6 +497,7 @@
         private System.Windows.Forms.CheckBox cbErrors;
         private System.Windows.Forms.CheckBox cbWarnings;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox cbTitle;
     }
 }
 
