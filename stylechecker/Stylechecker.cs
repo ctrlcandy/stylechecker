@@ -405,7 +405,15 @@ namespace stylechecker
                                         continue;
                                     }
                                     tableOfContentsInfo = false;
+                                    title = false;
                                 }
+                                else
+                                {
+                                    ResultErrors += "ВНИМАНИЕ! В ДОКУМЕНТЕ ОТСУТСТВУЕТ СОДЕРЖАНИЕ.\n";
+                                    ResultWarnings += "ВНИМАНИЕ! В ДОКУМЕНТЕ ОТСУТСТВУЕТ СОДЕРЖАНИЕ.\n";
+                                    title = false;
+                                }
+
                             }
 
                             if (p.Text.Length > 15)
