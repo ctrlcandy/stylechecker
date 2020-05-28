@@ -60,7 +60,7 @@ namespace stylechecker
                 {
                     /*foreach (var s in styles)
                     {
-                       // some shit
+                       // some code
                     }*/
 
                     if (magic.formatting.FontFamily.Name != DefaultFont)
