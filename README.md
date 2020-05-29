@@ -21,7 +21,7 @@
 ![alt text](https://github.com/ctrlcandy/stylechecker/blob/dev/images/image4.png?raw=true)
 
 
-##### *На случай, если не заработает какая-нибудь из библиотек…*
+### *На случай, если не заработает какая-нибудь из библиотек…*
 
 ##### Шаг 1: 
 Перейдите в stylechecker\packages и удалите папки, выделенные на скриншоте.
